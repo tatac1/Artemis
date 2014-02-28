@@ -310,7 +310,7 @@ void ConcolicRuntime::mergeTraceIntoTree()
         mSearchStrategy = DepthFirstSearchPtr(new DepthFirstSearch(mSymbolicExecutionGraph));
         mRunningWithInitialValues = false;
 
-        statistics()->accumulate("Concolic::ExecutionTree::DistinctTracesExplored", 1);
+        Statistics::statistics()->accumulate("Concolic::ExecutionTree::DistinctTracesExplored", 1);
     }else{
         // A normal run.
         // Merge trace with tracegraph
@@ -371,7 +371,7 @@ QSharedPointer<FormInputCollection> ConcolicRuntime::createFormInput(QMap<QStrin
         Symbolvalue value = solution->findSymbol(varName);
         if(!value.found){
             Log::error(QString("Error: Could not find value for %1 in the solver's solution.").arg(varName).toStdString());
-            statistics()->accumulate("Concolic::FailedInjections", 1);
+            Statistics::statistics()->accumulate("Concolic::FailedInjections", 1);
             continue;
         }
 
@@ -399,7 +399,7 @@ QSharedPointer<FormInputCollection> ConcolicRuntime::createFormInput(QMap<QStrin
             break;
         default:
             Log::error(QString("Unimplemented value type encountered for variable %1 (%2)").arg(varName).arg(value.kind).toStdString());
-            statistics()->accumulate("Concolic::FailedInjections", 1);
+            Statistics::statistics()->accumulate("Concolic::FailedInjections", 1);
             continue;
         }
 
@@ -443,14 +443,14 @@ QSharedPointer<const FormFieldDescriptor> ConcolicRuntime::findFormFieldForVaria
 
     default:
         Log::error("Error: Unexpected identification method for form fields encountered.");
-        statistics()->accumulate("Concolic::FailedInjections", 1);
+        Statistics::statistics()->accumulate("Concolic::FailedInjections", 1);
         return varSourceField; // Returning null to signify error.
     }
 
     // Check that we found a FormField.
     if(varSourceField.isNull()){
         Log::error(QString("Error: Could not identify a form field for %1.").arg(varName).toStdString());
-        statistics()->accumulate("Concolic::FailedInjections", 1);
+        Statistics::statistics()->accumulate("Concolic::FailedInjections", 1);
         return varSourceField; // Returning null to signify error.
     }
 
@@ -551,7 +551,7 @@ void ConcolicRuntime::chooseNextTargetAndExplore()
 
 void ConcolicRuntime::done()
 {
-    statistics()->accumulate("Concolic::Iterations", mNumIterations);
+    Statistics::statistics()->accumulate("Concolic::Iterations", mNumIterations);
     Runtime::done();
 }
 

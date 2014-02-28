@@ -254,7 +254,8 @@ SOURCES += \
     symbolic/expression/stringlength.cpp \
     symbolic/expression/stringcharat.cpp \
     symbolic/expression/stringregexsubmatch.cpp \
-    symbolic/expression/stringregexsubmatchindex.cpp
+    symbolic/expression/stringregexsubmatchindex.cpp\
+    statistics/statsstorage.cpp
 
 *sh4* {
     QMAKE_CXXFLAGS += -mieee -w
@@ -313,4 +314,5 @@ HEADERS += \
     symbolic/expression/stringlength.h \
     symbolic/expression/stringcharat.h \
     symbolic/expression/stringregexsubmatch.h \
-    symbolic/expression/stringregexsubmatchindex.h
+    symbolic/expression/stringregexsubmatchindex.h \
+    statistics/statsstorage.h

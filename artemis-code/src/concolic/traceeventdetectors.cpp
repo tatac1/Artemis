@@ -74,9 +74,9 @@ void TraceBranchDetector::slBranch(bool jump, Symbolic::Expression* condition, u
     // counter again for any duplicate nodes when the trace is merged into the tree.
     if(mTraceBuilder->isRecording()) {
         if(condition == NULL) {
-            statistics()->accumulate("Concolic::ExecutionTree::ConcreteBranchesTotal", 1);
+            Statistics::statistics()->accumulate("Concolic::ExecutionTree::ConcreteBranchesTotal", 1);
         }else{
-            statistics()->accumulate("Concolic::ExecutionTree::SymbolicBranchesTotal", 1);
+            Statistics::statistics()->accumulate("Concolic::ExecutionTree::SymbolicBranchesTotal", 1);
         }
     }
 }
@@ -93,7 +93,7 @@ void TraceAlertDetector::slJavascriptAlert(QWebFrame* frame, QString msg)
     // Leave node.next as null.
 
     if(mTraceBuilder->isRecording()){
-        statistics()->accumulate("Concolic::ExecutionTree::Alerts", 1);
+        Statistics::statistics()->accumulate("Concolic::ExecutionTree::Alerts", 1);
     }
 
     // Pass this new node to the trace builder and pass a pointer to where the sucessor should be attached.
@@ -128,7 +128,7 @@ void TracePageLoadDetector::slPageLoad(QUrl url)
     node->url = url;
 
     if(mTraceBuilder->isRecording()){
-        statistics()->accumulate("Concolic::ExecutionTree::PageLoads", 1);
+        Statistics::statistics()->accumulate("Concolic::ExecutionTree::PageLoads", 1);
     }
 
     // Pass the new node to the trace builder.
@@ -149,7 +149,7 @@ void TraceDomModDetector::slDomModified(QString start, QString end)
     node->words = metrics.second;
 
     if(mTraceBuilder->isRecording() && node->words.size() > 0){ // Condition must match TraceMerger::fixDoubleCountedAnnotations()
-        statistics()->accumulate("Concolic::ExecutionTree::InterestingDomModifications", 1);
+        Statistics::statistics()->accumulate("Concolic::ExecutionTree::InterestingDomModifications", 1);
     }
 
     // Pass the new node to the trace builder.

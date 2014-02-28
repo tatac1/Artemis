@@ -46,13 +46,13 @@ SolutionPtr CVC4Solver::solve(PathConditionPtr pc)
     CVC4ConstraintWriterPtr cw = CVC4ConstraintWriterPtr(new CVC4ConstraintWriter());
 
     if (!cw->write(pc, "/tmp/cvc4input")) {
-        statistics()->accumulate("Concolic::Solver::ConstraintsNotWritten", 1);
+        Statistics::statistics()->accumulate("Concolic::Solver::ConstraintsNotWritten", 1);
         constraintLog << "Could not translate the PC into solver input." << std::endl;
         constraintLog << pc->toStatisticsValuesString(true) << std::endl << std::endl;
         return SolutionPtr(new Solution(false, false, "Could not translate the PC into solver input."));
     }
 
-    statistics()->accumulate("Concolic::Solver::ConstraintsWritten", 1);
+    Statistics::statistics()->accumulate("Concolic::Solver::ConstraintsWritten", 1);
 
     // 2. run the solver on the file
 
@@ -89,18 +89,18 @@ SolutionPtr CVC4Solver::solve(PathConditionPtr pc)
     std::ifstream fp("/tmp/cvc4result");
 
     if (fp.is_open()) {
-        statistics()->accumulate("Concolic::Solver::ConstraintsSolved", 1);
+        Statistics::statistics()->accumulate("Concolic::Solver::ConstraintsSolved", 1);
 
         std::getline(fp, line); // load sat line
 
         if (line.compare("unsat") == 0) {
             // UNSAT
-            statistics()->accumulate("Concolic::Solver::ConstraintsSolvedAsUNSAT", 1);
+            Statistics::statistics()->accumulate("Concolic::Solver::ConstraintsSolvedAsUNSAT", 1);
             constraintLog << "Solved as UNSAT." << std::endl << std::endl;
             return SolutionPtr(new Solution(false, true));
         } else if (line.compare("sat") != 0 && line.compare("unknown") != 0) {
             // ERROR, we can't use return types to detect errors, since an unsat result will result in an error code (because we try to access the model)
-            statistics()->accumulate("Concolic::Solver::ConstraintsNotSolved", 1);
+            Statistics::statistics()->accumulate("Concolic::Solver::ConstraintsNotSolved", 1);
 
             constraintLog << "Error when solving the following PC:" << std::endl;
 
@@ -205,7 +205,7 @@ SolutionPtr CVC4Solver::solve(PathConditionPtr pc)
             constraintLog << symbol << " = " << symbolvalue.string << "\n";
         }
     } else {
-        statistics()->accumulate("Concolic::Solver::ConstraintsNotSolved", 1);
+        Statistics::statistics()->accumulate("Concolic::Solver::ConstraintsNotSolved", 1);
         constraintLog << "Could not read result file." << std::endl << std::endl;
         return SolutionPtr(new Solution(false, false, "Could not read result file."));
     }
